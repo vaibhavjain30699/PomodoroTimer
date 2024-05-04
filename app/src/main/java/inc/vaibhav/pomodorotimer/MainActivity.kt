@@ -29,9 +29,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import inc.vaibhav.pomodorotimer.ui.theme.PomodoroTimerTheme
 
@@ -57,7 +57,7 @@ fun Home(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "PomodoroTimer")
+                    Text(text = stringResource(id = R.string.app_name))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -72,26 +72,27 @@ fun Home(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            val progress = timerState.remainingSeconds.toFloat() / (25f * 60f)
-            val minutes = timerState.remainingSeconds / 60
-            val seconds = timerState.remainingSeconds - (minutes * 60)
+            val progress =
+                timerState.remainingSeconds.toFloat() / (POMODORO_TIMER_SECONDS.toFloat())
+            val minutes = timerState.remainingSeconds / SECONDS_IN_A_MINUTE
+            val seconds = timerState.remainingSeconds - (minutes * SECONDS_IN_A_MINUTE)
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
-                    modifier = Modifier.padding(bottom = 16.dp),
+                    modifier = Modifier.padding(bottom = Sizing.spacing16),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .width(250.dp)
-                            .height(250.dp),
+                            .width(Sizing.spacing256)
+                            .height(Sizing.spacing256),
                         progress = progress
                     )
                     Text(
                         text = "Timer\n$minutes : $seconds",
-                        modifier = Modifier.padding(bottom = 8.dp),
+                        modifier = Modifier.padding(bottom = Sizing.spacing8),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -99,7 +100,7 @@ fun Home(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        modifier = Modifier.padding(bottom = 8.dp),
+                        modifier = Modifier.padding(bottom = Sizing.spacing8),
                         onClick = {
                             if (timerState.isPaused) {
                                 timerViewModel.startTimer(timerState.remainingSeconds)
@@ -115,9 +116,9 @@ fun Home(
                         )
                     }
                     IconButton(
-                        modifier = Modifier.padding(bottom = 8.dp),
+                        modifier = Modifier.padding(bottom = Sizing.spacing8),
                         onClick = {
-                            timerViewModel.resetTimer(25 * 60)
+                            timerViewModel.resetTimer(POMODORO_TIMER_SECONDS)
                         }
                     ) {
                         Icon(imageVector = Icons.Filled.Refresh, contentDescription = null)
@@ -127,3 +128,6 @@ fun Home(
         }
     }
 }
+
+const val POMODORO_TIMER_SECONDS = 1500L
+const val SECONDS_IN_A_MINUTE = 60L

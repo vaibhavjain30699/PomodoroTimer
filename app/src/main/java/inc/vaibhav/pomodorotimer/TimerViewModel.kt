@@ -26,13 +26,13 @@ class TimerViewModel() : ViewModel() {
             )
         }
         pomodoroTimer = object : CountDownTimer(
-            seconds * 1000,
-            1000
+            seconds * MILLISECONDS_IN_A_SECOND,
+            MILLISECONDS_IN_A_SECOND
         ) {
             override fun onTick(millisUntilFinished: Long) {
                 _timerState.update {
                     it.copy(
-                        remainingSeconds = millisUntilFinished / 1000
+                        remainingSeconds = millisUntilFinished / MILLISECONDS_IN_A_SECOND
                     )
                 }
             }
@@ -68,3 +68,5 @@ class TimerViewModel() : ViewModel() {
         }
     }
 }
+
+const val MILLISECONDS_IN_A_SECOND = 1000L
