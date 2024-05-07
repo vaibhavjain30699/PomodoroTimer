@@ -14,7 +14,8 @@ class TimerViewModel() : ViewModel() {
     init {
         _timerState.update {
             it.copy(
-                remainingSeconds = POMODORO_TIMER_SECONDS
+                remainingSeconds = POMODORO_TIMER_SECONDS,
+                lastTimer = TimerType.POMODORO
             )
         }
     }
@@ -42,7 +43,16 @@ class TimerViewModel() : ViewModel() {
                 _timerState.update {
                     it.copy(
                         isPaused = true,
-                        remainingSeconds = POMODORO_TIMER_SECONDS,
+                        remainingSeconds =
+                        if (it.lastTimer == TimerType.POMODORO)
+                            REST_TIMER_SECONDS
+                        else
+                            POMODORO_TIMER_SECONDS,
+                        lastTimer =
+                        if (it.lastTimer == TimerType.POMODORO)
+                            TimerType.REST
+                        else
+                            TimerType.POMODORO
                     )
                 }
             }
@@ -64,7 +74,8 @@ class TimerViewModel() : ViewModel() {
         _timerState.update {
             it.copy(
                 isPaused = true,
-                remainingSeconds = seconds
+                remainingSeconds = seconds,
+                lastTimer = TimerType.POMODORO
             )
         }
     }

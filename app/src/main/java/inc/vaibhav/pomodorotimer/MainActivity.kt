@@ -55,7 +55,11 @@ fun Home(
     timerViewModel: TimerViewModel = viewModel()
 ) {
     val timerState by timerViewModel.timerState.collectAsState()
-
+    val timerSeconds =
+        if (timerState.lastTimer == TimerType.POMODORO)
+            POMODORO_TIMER_SECONDS
+        else
+            REST_TIMER_SECONDS
     val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.sound)
 
     LaunchedEffect(key1 = timerState.remainingSeconds) {
@@ -83,7 +87,7 @@ fun Home(
             contentAlignment = Alignment.Center,
         ) {
             val progress =
-                timerState.remainingSeconds.toFloat() / (POMODORO_TIMER_SECONDS.toFloat())
+                timerState.remainingSeconds.toFloat() / (timerSeconds.toFloat())
             val minutes = timerState.remainingSeconds / SECONDS_IN_A_MINUTE
             val seconds = timerState.remainingSeconds - (minutes * SECONDS_IN_A_MINUTE)
             Column(
@@ -140,4 +144,5 @@ fun Home(
 }
 
 const val POMODORO_TIMER_SECONDS = 1500L
+const val REST_TIMER_SECONDS = 300L
 const val SECONDS_IN_A_MINUTE = 60L
