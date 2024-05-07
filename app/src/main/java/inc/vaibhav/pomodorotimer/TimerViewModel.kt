@@ -14,7 +14,7 @@ class TimerViewModel() : ViewModel() {
     init {
         _timerState.update {
             it.copy(
-                remainingSeconds = 25L * 60L
+                remainingSeconds = POMODORO_TIMER_SECONDS
             )
         }
     }
@@ -41,7 +41,8 @@ class TimerViewModel() : ViewModel() {
                 pomodoroTimer?.cancel()
                 _timerState.update {
                     it.copy(
-                        isPaused = true
+                        isPaused = true,
+                        remainingSeconds = POMODORO_TIMER_SECONDS,
                     )
                 }
             }

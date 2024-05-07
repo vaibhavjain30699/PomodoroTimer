@@ -1,5 +1,6 @@
 package inc.vaibhav.pomodorotimer
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,11 +25,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +55,13 @@ fun Home(
     timerViewModel: TimerViewModel = viewModel()
 ) {
     val timerState by timerViewModel.timerState.collectAsState()
+
+    val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.sound)
+
+    LaunchedEffect(key1 = timerState.remainingSeconds) {
+        if (timerState.remainingSeconds == 0L)
+            mediaPlayer.start()
+    }
 
     Scaffold(
         topBar = {
